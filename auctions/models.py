@@ -10,7 +10,7 @@ class Category(models.Model):
     name = models.CharField(max_length=32)
 
     def __str__(self):
-        return f"Category: {self.name}"
+        return f"{self.name}"
 
 class Listing(models.Model):
     title = models.CharField(max_length=64)
@@ -21,7 +21,7 @@ class Listing(models.Model):
     owner = models.ForeignKey(User,related_name="listings", on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Listing: {self.title} by {self.owner}"
+        return f"{self.title}({self.description[0:32]}) by {self.owner}"
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="comments", null=True)
@@ -30,7 +30,7 @@ class Comment(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="comments")
 
     def __str__(self):
-        return f"Comment: {self.user}: {self.text[0:10]} at {self.listing}"
+        return f"{self.user}: '{self.text[0:32]}' at {self.listing}"
 
 class Bid(models.Model):
     value = models.IntegerField()
@@ -38,4 +38,4 @@ class Bid(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="bids")
 
     def __str__(self):
-        return f"Bid: {self.value} by {self.user} at {self.listing}"
+        return f"{self.value} by {self.user} at {self.listing}"
