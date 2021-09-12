@@ -9,19 +9,13 @@ from django.forms import ModelForm, fields, models
 from django.core.validators import MaxLengthValidator
 from django.contrib.auth.decorators import login_required
 
+from datetime import datetime
+
 from .models import Category, Listing, User, Comment, Bid
 
 
 def index(request):
-    listings = Listing.objects.all()
-    # listings_with_bids = []
-    # for listing in listings:
-        # bid = Bid.objects.filter(listing=listing).order_by("-value").first()
-        # if bid:
-        #     pair = (listing, bid.value)
-        # else:
-        #     pair = (listing, listing.starting_price)
-        # listings_with_bids.append(pair)
+    listings = Listing.objects.filter(active=True).order_by("-datetime").all()
     return render(request, "auctions/index.html", {
         "listings": listings,
     })
@@ -84,24 +78,19 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
-# class NewListingForm(forms.Form):
-#     title = forms.CharField(max_length=64)
-#     description = forms.CharField(max_length=1000)
-#     starting_bid = forms.IntegerField()
-#     photo = forms.CharField(max_length=1000)
-#     category = forms.ModelChoiceField(queryset=Category.objects.all())
 class NewListingForm(ModelForm):
     class Meta:
         model = Listing
         fields = ["title", "description", "starting_price", "photo", "category"]
 
-
+@login_required
 def new_listing(request):
     if request.method == "POST":
         form = NewListingForm(request.POST)
         if form.is_valid():
             listing = form.save(commit=False)
             listing.owner = request.user
+            listing.datetime = datetime.now()
             listing.save()
             return HttpResponseRedirect(reverse("index"))
         else:
@@ -170,3 +159,19 @@ def unwatch(request, id):
     user.watchlist.remove(listing)
     user.save()
     return HttpResponseRedirect(reverse('listing', args=[id]))
+
+@login_required
+def deactivate(request, id):
+    try:
+        listing = Listing.objects.get(pk=id)
+    except Listing.DoesNotExist:
+        return render(request, "auctions/404.html")
+    if not listing.active:
+        return render(request, "auctions/forbidden.html")
+    user = request.user
+    if user == listing.owner:
+        listing.active = False
+        listing.save()
+        return HttpResponseRedirect(reverse('listing', args=[id]))
+    else:
+        return render(request, "auctions/forbidden.html")

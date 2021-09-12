@@ -6,8 +6,11 @@ from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
+from datetime import datetime
+
 class User(AbstractUser):
     watchlist = models.ManyToManyField('Listing', blank=True, related_name="users_watching")
+
 
 class Category(models.Model):
     name = models.CharField(max_length=32)
@@ -24,6 +27,8 @@ class Listing(models.Model):
     photo = models.CharField(max_length=1000)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name="listings", null=True, blank=True)
     owner = models.ForeignKey(User,related_name="listings", on_delete=models.CASCADE)
+    active = models.BooleanField(default=True)
+    datetime = models.DateTimeField(default=datetime.now())
 
     def highest_bid(self):
         return self.bids.order_by("-value").first()

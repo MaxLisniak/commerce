@@ -2,34 +2,52 @@
 
 {% block body %}
     {% if listing in user.watchlist.all %}
-    <a href="{% url 'unwatch' listing.id %}">Remove from watchlist</a>
+        <a href="{% url 'unwatch' listing.id %}">Remove from watchlist</a>
     {% else %}
-    <a href="{% url 'watch' listing.id %}">Add to watchlist</a>
+        <a href="{% url 'watch' listing.id %}">Add to watchlist</a>
     {% endif %}
     <h1>{{ listing.title }}</h1>
     <p>{{ listing.description }}</p>
-    <p>Current price:
-        {% if listing.highest_bid %}
-            {{ listing.highest_bid.value }}
+    {% if listing.active %}
+        <p>Current price:
+            {% if listing.highest_bid %}
+                {{ listing.highest_bid.value }}
+            {% else %}
+                {{ listing.starting_price }}
+            {% endif %}
+        </p>
+        <p>{{ listing.bids.count }} bid(s) so far.</p>
+        {% if user == listing.owner %}
+            <h2>Bid history:</h2>
+            <ul>
+                {% for bid in bids %}
+                <li>{{ bid.value }} by {{ bid.user }}</li>
+                {% empty %}
+                <li>No bids yet</li>
+                {% endfor %}
+            </ul>
+            <a href="{% url 'deactivate' listing.id %}">Close this listing</a>
         {% else %}
-            {{ listing.starting_price }}
+        <h2>Make a bid</h2>
+        <form action="{% url 'listing' listing.id %}" method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Bid">
+        </form>
         {% endif %}
-    </p>
-    {% if user == listing.owner %}
-        <h2>Bid history:</h2>
-        <ul>
-            {% for bid in bids %}
-            <li>{{ bid.value }} by {{ bid.user }}</li>
-            {% empty %}
-            <li>No bids yet</li>
-            {% endfor %}
-        </ul>
     {% else %}
-    <h2>Make a bid</h2>
-    <form action="{% url 'listing' listing.id %}" method="POST">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Bid">
-    </form>
+        <p>Final price:
+            {% if listing.highest_bid %}
+                {{ listing.highest_bid.value }}
+            {% else %}
+                {{ listing.starting_price }}
+            {% endif %}
+        </p>
+        {% if listing.highest_bid.user == user %}
+            <h2>Congratulations! You won the bid!</h2>
+        {% else %}
+            <h2>This bid is closed.</h2>
+        {% endif %}
     {% endif %}
+    
 {% endblock %}
