@@ -15,7 +15,7 @@ class Category(models.Model):
 class Listing(models.Model):
     title = models.CharField(max_length=64)
     description = models.CharField(max_length=1000)
-    starting_bid = models.IntegerField(validators=[
+    starting_price = models.IntegerField(validators=[
         MinValueValidator(1)
     ])
     photo = models.CharField(max_length=1000)
