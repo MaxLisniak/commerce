@@ -175,3 +175,19 @@ def deactivate(request, id):
         return HttpResponseRedirect(reverse('listing', args=[id]))
     else:
         return render(request, "auctions/forbidden.html")
+
+def categories(request):
+    categories = Category.objects.all()
+    return render(request, "auctions/categories.html", {
+        "categories": categories,
+    })
+
+def category(request, name):
+    category = Category.objects.filter(name=name).first()
+    if not category:
+        return render(request, "auctions/404.html")
+    else:
+        return render(request, "auctions/category.html", {
+            "listings": category.listings.filter(active=True).order_by("-datetime").all(),
+            "category": category,
+        })

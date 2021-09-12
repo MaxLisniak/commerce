@@ -2,6 +2,7 @@
 
 {% block body %}
     <h2>Active Listings</h2>
+    <p>Filtered by category: {{ category.name }}</p>
 {% endblock %}
 {% block listings %}
     {{ block.super }}
