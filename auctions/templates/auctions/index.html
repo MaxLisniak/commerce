@@ -3,14 +3,20 @@
 {% block body %}
     <h2>Active Listings</h2>
     <ul>
-        {% for listing, bid in listings %}
+        {% for listing in listings %}
             <li>
                 <p>{{ listing.title }}</p>
                 <p>{{ listing.description }}</p>
                 <p>{{ listing.photo }}</p>
                 <p>{{ listing.category.name }}</p>
                 <p>{{ listing.owner.username }}</p>
-                <p>Price: {{ bid }}</p>
+                <p>Price: 
+                    {% if listing.highest_bid %}
+                        {{ listing.highest_bid.value }}
+                    {% else %}
+                        {{ listing.starting_price }}
+                    {% endif %}
+                </p>
                 <a href="{% url 'listing' listing.id %}">SEE</a>
             </li>
         {% empty %}

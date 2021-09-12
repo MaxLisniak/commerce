@@ -14,16 +14,16 @@ from .models import Category, Listing, User, Comment, Bid
 
 def index(request):
     listings = Listing.objects.all()
-    listings_with_bids = []
-    for listing in listings:
-        bid = Bid.objects.filter(listing=listing).order_by("-value").first()
-        if bid:
-            pair = (listing, bid.value)
-        else:
-            pair = (listing, listing.starting_price)
-        listings_with_bids.append(pair)
+    # listings_with_bids = []
+    # for listing in listings:
+        # bid = Bid.objects.filter(listing=listing).order_by("-value").first()
+        # if bid:
+        #     pair = (listing, bid.value)
+        # else:
+        #     pair = (listing, listing.starting_price)
+        # listings_with_bids.append(pair)
     return render(request, "auctions/index.html", {
-        "listings": listings_with_bids,
+        "listings": listings,
     })
 
 
