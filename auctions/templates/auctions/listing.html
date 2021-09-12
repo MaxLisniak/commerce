@@ -8,4 +8,27 @@
     {% endif %}
     <h1>{{ listing.title }}</h1>
     <p>{{ listing.description }}</p>
+    <p>Current price:
+        {% if listing.highest_bid %}
+            {{ listing.highest_bid.value }}
+        {% else %}
+            {{ listing.starting_price }}
+        {% endif %}
+    </p>
+    {% if user == listing.owner %}
+        <h2>Bids:</h2>
+        <ul>
+            {% for bid in bids %}
+            <li>{{ bid.value }} by {{ bid.user }}</li>
+            {% empty %}
+            <li>No bids yet</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+    <form action="{% url 'listing' listing.id %}" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Bid">
+    </form>
+    {% endif %}
 {% endblock %}

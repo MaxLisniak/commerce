@@ -114,15 +114,39 @@ def new_listing(request):
             "form": form 
         })
 
+class BidForm(ModelForm):
+    class Meta:
+        model = Bid
+        fields = ["value", "user", "listing"]
+        widgets = {
+            'user': forms.HiddenInput(),
+            'listing': forms.HiddenInput()}
+
 def listing(request, id):
     try:
         listing = Listing.objects.get(pk=id)
     except Listing.DoesNotExist:
         return render(request, "auctions/404.html")
-    # watchlist = request.user
+    if request.method == "POST":
+        data = {
+            "value": request.POST.get("value"),
+            "user": request.user,
+            "listing": listing,
+        }
+        form = BidForm(data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('listing', args=[id]))
+        else:
+            return render(request, "auctions/listing.html", {
+                "listing": listing,
+                "form": form,
+                "bids": listing.bids.order_by('-value').all()
+            })
     return render(request, "auctions/listing.html", {
         "listing": listing,
-        # "watchlist": watchlist,
+        "form": BidForm(),
+        "bids": listing.bids.order_by('-value').all()
     })
 
 @login_required
@@ -146,4 +170,3 @@ def unwatch(request, id):
     user.watchlist.remove(listing)
     user.save()
     return HttpResponseRedirect(reverse('listing', args=[id]))
-
