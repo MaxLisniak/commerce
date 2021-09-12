@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models.fields.related import ForeignKey
-
+from django.core.validators import MinValueValidator
 
 class User(AbstractUser):
     pass
@@ -15,7 +15,9 @@ class Category(models.Model):
 class Listing(models.Model):
     title = models.CharField(max_length=64)
     description = models.CharField(max_length=1000)
-    starting_bid = models.IntegerField()
+    starting_bid = models.IntegerField(validators=[
+        MinValueValidator(1)
+    ])
     photo = models.CharField(max_length=1000)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name="listings", null=True, blank=True)
     owner = models.ForeignKey(User,related_name="listings", on_delete=models.CASCADE)

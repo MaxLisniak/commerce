@@ -1,9 +1,12 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
+from django.db.models.fields import CharField
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django import forms
+from django.forms import ModelForm, fields, models
+from django.core.validators import MaxLengthValidator
 
 from .models import Category, Listing, User
 
@@ -63,32 +66,30 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
-class NewListingForm(forms.Form):
-    title = forms.CharField(max_length=64)
-    description = forms.CharField(max_length=1000)
-    starting_bid = forms.IntegerField()
-    photo = forms.CharField(max_length=1000)
-    category = forms.ModelChoiceField(queryset=Category.objects.all())
+# class NewListingForm(forms.Form):
+#     title = forms.CharField(max_length=64)
+#     description = forms.CharField(max_length=1000)
+#     starting_bid = forms.IntegerField()
+#     photo = forms.CharField(max_length=1000)
+#     category = forms.ModelChoiceField(queryset=Category.objects.all())
+class NewListingForm(ModelForm):
+    class Meta:
+        model = Listing
+        fields = ["title", "description", "starting_bid", "photo", "category"]
+
 
 def new_listing(request):
     if request.method == "POST":
         form = NewListingForm(request.POST)
         if form.is_valid():
-            title = form.cleaned_data["title"]
-            description = form.cleaned_data["description"]
-            starting_bid = form.cleaned_data["starting_bid"]
-            photo = form.cleaned_data["photo"]
-            category = form.cleaned_data["category"]
-            owner = request.user
-            listing = Listing(
-                title=title,
-                description=description,
-                starting_bid=starting_bid,
-                photo=photo,
-                category=category,
-                owner=owner)
+            listing = form.save(commit=False)
+            listing.owner = request.user
             listing.save()
-        return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            return render(request, "auctions/new_listing.html",{
+                "form": form 
+            })
     else:
         form = NewListingForm()
         return render(request, "auctions/new_listing.html",{
