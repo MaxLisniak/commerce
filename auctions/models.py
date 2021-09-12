@@ -28,7 +28,7 @@ class Listing(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name="listings", null=True, blank=True)
     owner = models.ForeignKey(User,related_name="listings", on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
-    datetime = models.DateTimeField(default=datetime.now())
+    datetime = models.DateTimeField(default=datetime(2021, 9, 12))
 
     def highest_bid(self):
         return self.bids.order_by("-value").first()
