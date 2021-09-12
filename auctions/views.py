@@ -134,9 +134,7 @@ def watch(request, id):
     user = request.user
     user.watchlist.add(listing)
     user.save()
-    return render(request, "auctions/listing.html", {
-        "listing": listing
-    })
+    return HttpResponseRedirect(reverse('listing', args=[id]))
 
 @login_required
 def unwatch(request, id):
@@ -147,6 +145,5 @@ def unwatch(request, id):
     user = request.user
     user.watchlist.remove(listing)
     user.save()
-    return render(request, "auctions/listing.html", {
-        "listing": listing
-    })
+    return HttpResponseRedirect(reverse('listing', args=[id]))
+
