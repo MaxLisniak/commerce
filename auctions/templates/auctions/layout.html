@@ -26,6 +26,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'categories' %}">Categories</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
+            </li>
             {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
@@ -41,8 +44,6 @@
         </ul>
         <hr>
         {% block body %}
-        {% endblock %}
-        {% block listings %}
         {% endblock %}
     </body>
 </html>

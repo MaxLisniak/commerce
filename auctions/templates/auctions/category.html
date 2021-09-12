@@ -1,9 +1,13 @@
-{% extends "auctions/listings.html" %}
+{% extends "auctions/layout.html" %}
 
 {% block body %}
     <h2>Active Listings</h2>
     <p>Filtered by category: {{ category.name }}</p>
-{% endblock %}
-{% block listings %}
-    {{ block.super }}
+    <ul>
+        {% for listing in listings %}
+            {% include "auctions/listing_info.html" %}
+        {% empty %}
+            <li>No active listings at this category for now.</li>
+        {% endfor %}
+    </ul>
 {% endblock %}
