@@ -7,6 +7,7 @@ from django.urls import reverse
 from django import forms
 from django.forms import ModelForm, fields, models
 from django.core.validators import MaxLengthValidator
+from django.contrib.auth.decorators import login_required
 
 from .models import Category, Listing, User, Comment, Bid
 
@@ -27,6 +28,7 @@ def index(request):
 
 
 def login_view(request):
+    next = request.POST.get('next', request.GET.get('next', '/'))
     if request.method == "POST":
 
         # Attempt to sign user in
@@ -37,13 +39,18 @@ def login_view(request):
         # Check if authentication successful
         if user is not None:
             login(request, user)
+            if next:
+               return HttpResponseRedirect(next) 
             return HttpResponseRedirect(reverse("index"))
         else:
             return render(request, "auctions/login.html", {
-                "message": "Invalid username and/or password."
+                "message": "Invalid username and/or password.",
+                "next": next,
             })
     else:
-        return render(request, "auctions/login.html")
+        return render(request, "auctions/login.html", {
+            "next": next,
+        })
 
 
 def logout_view(request):
@@ -106,3 +113,40 @@ def new_listing(request):
         return render(request, "auctions/new_listing.html",{
             "form": form 
         })
+
+def listing(request, id):
+    try:
+        listing = Listing.objects.get(pk=id)
+    except Listing.DoesNotExist:
+        return render(request, "auctions/404.html")
+    # watchlist = request.user
+    return render(request, "auctions/listing.html", {
+        "listing": listing,
+        # "watchlist": watchlist,
+    })
+
+@login_required
+def watch(request, id):
+    try:
+        listing = Listing.objects.get(pk=id)
+    except Listing.DoesNotExist:
+        return render(request, "auctions/404.html")
+    user = request.user
+    user.watchlist.add(listing)
+    user.save()
+    return render(request, "auctions/listing.html", {
+        "listing": listing
+    })
+
+@login_required
+def unwatch(request, id):
+    try:
+        listing = Listing.objects.get(pk=id)
+    except Listing.DoesNotExist:
+        return render(request, "auctions/404.html")
+    user = request.user
+    user.watchlist.remove(listing)
+    user.save()
+    return render(request, "auctions/listing.html", {
+        "listing": listing
+    })

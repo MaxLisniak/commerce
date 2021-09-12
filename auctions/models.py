@@ -4,7 +4,7 @@ from django.db.models.fields.related import ForeignKey
 from django.core.validators import MinValueValidator
 
 class User(AbstractUser):
-    pass
+    watchlist = models.ManyToManyField('Listing', blank=True, related_name="users_watching")
 
 class Category(models.Model):
     name = models.CharField(max_length=32)

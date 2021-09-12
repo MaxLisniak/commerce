@@ -11,7 +11,7 @@
                 <p>{{ listing.category.name }}</p>
                 <p>{{ listing.owner.username }}</p>
                 <p>Price: {{ bid }}</p>
-                
+                <a href="{% url 'listing' listing.id %}">SEE</a>
             </li>
         {% empty %}
             <li>No active listings for now.</li>
