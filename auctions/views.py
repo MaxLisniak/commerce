@@ -197,6 +197,7 @@ def category(request, name):
             "listings": category.listings.filter(active=True).order_by("-datetime").all(),
             "category": category,
         })
+@login_required
 def watchlist(request):
     return render(request, "auctions/watchlist.html",{
         "listings": request.user.watchlist.all()
