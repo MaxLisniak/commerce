@@ -1,0 +1,13 @@
+{% extends "auctions/layout.html" %}
+
+ {% block body %}
+     <h1>Watchlist</h1>
+     <ul>
+         {% for listing in listings %}
+             {% include "auctions/listing_info.html" %}
+             <a href="{% url 'unwatch' listing.id %}?next={{request.get_full_path}}">Remove from watchlist</a>
+         {% empty %}
+             <li>No listings were added yet.</li>
+         {% endfor %}
+     </ul>
+ {% endblock %}

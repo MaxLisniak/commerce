@@ -144,9 +144,12 @@ def watch(request, id):
         listing = Listing.objects.get(pk=id)
     except Listing.DoesNotExist:
         return render(request, "auctions/404.html")
+    next = request.GET.get("next")
     user = request.user
     user.watchlist.add(listing)
     user.save()
+    if next:
+         return HttpResponseRedirect(next)
     return HttpResponseRedirect(reverse('listing', args=[id]))
 
 @login_required
@@ -155,9 +158,12 @@ def unwatch(request, id):
         listing = Listing.objects.get(pk=id)
     except Listing.DoesNotExist:
         return render(request, "auctions/404.html")
+    next = request.GET.get("next")
     user = request.user
     user.watchlist.remove(listing)
     user.save()
+    if next:
+         return HttpResponseRedirect(next)
     return HttpResponseRedirect(reverse('listing', args=[id]))
 
 @login_required
@@ -191,3 +197,7 @@ def category(request, name):
             "listings": category.listings.filter(active=True).order_by("-datetime").all(),
             "category": category,
         })
+def watchlist(request):
+    return render(request, "auctions/watchlist.html",{
+        "listings": request.user.watchlist.all()
+    }) 
