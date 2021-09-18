@@ -111,31 +111,65 @@ class BidForm(ModelForm):
             'user': forms.HiddenInput(),
             'listing': forms.HiddenInput()}
 
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ["text", "user", "listing", "datetime"]
+        widgets = {
+            'user': forms.HiddenInput(),
+            'listing': forms.HiddenInput(),
+            'datetime': forms.HiddenInput()}
+
 def listing(request, id):
     try:
         listing = Listing.objects.get(pk=id)
     except Listing.DoesNotExist:
         return render(request, "auctions/404.html")
+    comments = Comment.objects.filter(listing=listing).order_by("-datetime").all()
     if request.method == "POST":
-        data = {
-            "value": request.POST.get("value"),
-            "user": request.user,
-            "listing": listing,
-        }
-        form = BidForm(data)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('listing', args=[id]))
-        else:
-            return render(request, "auctions/listing.html", {
+        if 'place_bid' in request.POST:
+            data = {
+                "value": request.POST.get("value"),
+                "user": request.user,
                 "listing": listing,
-                "form": form,
-                "bids": listing.bids.order_by('-value').all()
-            })
+            }
+            form = BidForm(data)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect(reverse('listing', args=[id]))
+            else:
+                return render(request, "auctions/listing.html", {
+                    "listing": listing,
+                    "form": form,
+                    "comment_form": CommentForm(),
+                    "bids": listing.bids.order_by('-value').all(),
+                    "comments": comments,
+                })
+        if 'comment' in request.POST:
+            comment_data = {
+                "text": request.POST.get("text"),
+                "user": request.user,
+                "listing": listing,
+                "datetime": datetime.now(),
+            }
+            comment_form = CommentForm(comment_data)
+            if comment_form.is_valid():
+                comment_form.save()
+                return HttpResponseRedirect(reverse('listing', args=[id]))
+            else:
+                return render(request, "auctions/listing.html", {
+                    "listing": listing,
+                    "form": BidForm(),
+                    "comment_form": comment_form,
+                    "bids": listing.bids.order_by('-value').all(),
+                    "comments": comments,
+                })
     return render(request, "auctions/listing.html", {
         "listing": listing,
         "form": BidForm(),
-        "bids": listing.bids.order_by('-value').all()
+        "comment_form": CommentForm(),
+        "bids": listing.bids.order_by('-value').all(),
+        "comments": comments,
     })
 
 @login_required

@@ -28,11 +28,11 @@
             </ul>
             <a href="{% url 'deactivate' listing.id %}">Close this listing</a>
         {% else %}
-        <h2>Make a bid</h2>
+        <h2>Place a bid</h2>
         <form action="{% url 'listing' listing.id %}" method="POST">
             {% csrf_token %}
             {{ form }}
-            <input type="submit" value="Bid">
+            <input type="submit" name="place_bid" value="Bid">
         </form>
         {% endif %}
     {% else %}
@@ -49,5 +49,22 @@
             <h2>This bid is closed.</h2>
         {% endif %}
     {% endif %}
+    <h3>Comments</h3>
+    <form action="{% url 'listing' listing.id %}" method="POST">
+        {% csrf_token %}
+        {{ comment_form }}
+        <input type="submit" name="comment" value="Send">
+    </form>
+    <ul>
+        {% for comment in comments %}
+            <li>
+                <p>{{comment.user}}</p>
+                <p>{{comment.text}}</p>
+                <p>{{comment.datetime|date:'Y-m-d H:i'}}</p>
+            </li>
+        {% empty %}
+            <li>No comments so far.</li>
+        {% endfor %}
+    </ul>
     
 {% endblock %}

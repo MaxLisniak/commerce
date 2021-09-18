@@ -39,7 +39,7 @@ class Listing(models.Model):
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="comments", null=True)
     text = models.CharField(max_length=500)
-    datetime = models.DateTimeField
+    datetime = models.DateTimeField(default=datetime(2021, 9, 12))
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="comments")
 
     def __str__(self):
