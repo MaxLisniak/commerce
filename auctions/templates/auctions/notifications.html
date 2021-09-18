@@ -1,0 +1,15 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<ul>
+    {% for notification in notifications %}
+    <li>
+        <p>{{ notification.text }}</p>
+        <p>{{ notification.datetime|date:'Y-m-d H:i' }}</p>
+        <a href="{% url 'notification' notification.id %}">See details</a>
+    </li>
+    {% empty %}
+        <li>No notifications so far.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

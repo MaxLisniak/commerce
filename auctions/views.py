@@ -212,12 +212,13 @@ def deactivate(request, id):
     if user == listing.owner:
         listing.active = False
         listing.save()
-        notification = f"Congratulations! You won the bid {listing}!"
-        Notification(user=listing.highest_bid.user, 
-                    text=notification, 
+        notification_text = f"Congratulations! You won the bid '{listing}'!"
+        notification = Notification(user=listing.highest_bid().user, 
+                    text=notification_text, 
                     datetime=datetime.now(),
-                    url=f"listing/{id}",
+                    url=reverse('listing', args=[listing.id]),
                     )
+        notification.save()
         return HttpResponseRedirect(reverse('listing', args=[id]))
     else:
         return render(request, "auctions/forbidden.html")
@@ -242,3 +243,23 @@ def watchlist(request):
     return render(request, "auctions/watchlist.html",{
         "listings": request.user.watchlist.all()
     })
+
+@login_required
+def notifications(request):
+    user = request.user
+    notifications = user.notifications.order_by("-datetime").all()
+    return render(request, "auctions/notifications.html",{
+        "notifications": notifications,
+    })
+
+@login_required
+def notification(request, id):
+    try:
+        notification = Notification.objects.get(pk=id)
+    except Notification.DoesNotExist:
+        return render(request, "auctions/404.html")
+    if notification.user != request.user:
+        return render(request, "auctions/forbidden.html")
+    notification.seen = True
+    notification.save()
+    return HttpResponseRedirect(notification.url)

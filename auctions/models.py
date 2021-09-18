@@ -11,6 +11,8 @@ from datetime import datetime
 class User(AbstractUser):
     watchlist = models.ManyToManyField('Listing', blank=True, related_name="users_watching")
 
+    def unread(self):
+        return self.notifications.filter(seen=False).count()
 
 class Category(models.Model):
     name = models.CharField(max_length=32, unique=True)
@@ -34,7 +36,7 @@ class Listing(models.Model):
         return self.bids.order_by("-value").first()
 
     def __str__(self):
-        return f"{self.title}({self.description[0:32]}) by {self.owner}"
+        return f"{self.title} by {self.owner}"
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="comments", null=True)
@@ -69,3 +71,6 @@ class Notification(models.Model):
     datetime = models.DateTimeField(default=datetime(2021, 9, 12))
     url = models.CharField(null=True, max_length=20)
     seen = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.text}"
