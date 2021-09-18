@@ -24,7 +24,7 @@ class Listing(models.Model):
     starting_price = models.IntegerField(validators=[
         MinValueValidator(1)
     ])
-    photo = models.CharField(max_length=1000)
+    photo = models.URLField(max_length=1000, null=True, default=None)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name="listings", null=True, blank=True)
     owner = models.ForeignKey(User,related_name="listings", on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
@@ -62,3 +62,10 @@ class Bid(models.Model):
 
     def __str__(self):
         return f"{self.value} by {self.user} at {self.listing}"
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notifications")
+    text = models.CharField(max_length=200)
+    datetime = models.DateTimeField(default=datetime(2021, 9, 12))
+    url = models.CharField(null=True, max_length=20)
+    seen = models.BooleanField(default=False)

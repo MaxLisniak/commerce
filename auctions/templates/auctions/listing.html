@@ -7,6 +7,9 @@
         <a href="{% url 'watch' listing.id %}">Add to watchlist</a>
     {% endif %}
     <h1>{{ listing.title }}</h1>
+    {% if listing.photo %}
+        <img src="{{ listing.photo }}" alt="Listing's photo">
+    {% endif %}
     <p>{{ listing.description }}</p>
     {% if listing.active %}
         <p>Current price:

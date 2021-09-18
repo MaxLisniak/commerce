@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 
 from datetime import datetime
 
-from .models import Category, Listing, User, Comment, Bid
+from .models import Category, Listing, Notification, User, Comment, Bid
 
 
 def index(request):
@@ -212,6 +212,12 @@ def deactivate(request, id):
     if user == listing.owner:
         listing.active = False
         listing.save()
+        notification = f"Congratulations! You won the bid {listing}!"
+        Notification(user=listing.highest_bid.user, 
+                    text=notification, 
+                    datetime=datetime.now(),
+                    url=f"listing/{id}",
+                    )
         return HttpResponseRedirect(reverse('listing', args=[id]))
     else:
         return render(request, "auctions/forbidden.html")

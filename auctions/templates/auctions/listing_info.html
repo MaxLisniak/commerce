@@ -1,7 +1,9 @@
 <li>
     <p>{{ listing.title }}</p>
     <p>{{ listing.description }}</p>
-    <p>{{ listing.photo }}</p>
+    {% if listing.photo %}
+        <img src="{{ listing.photo }}" alt="Listing's photo">
+    {% endif %}
     <p>{{ listing.category.name }}</p>
     <p>{{ listing.owner.username }}</p>
     <p>Price: 
