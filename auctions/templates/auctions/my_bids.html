@@ -1,0 +1,37 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>My Bids</h2>
+    <p>Active Listings:</p>
+    <ul>
+        {% for bid in bids %}
+            {% if bid.listing.active %}
+            <li>
+                <a href="{% url 'listing' bid.listing.id %}">
+                    {{ bid.value }} at {{ bid.listing }}
+                    {% if bid == bid.listing.highest_bid %}
+                    (your bid is the highest bid so far)
+                    {% endif %}
+                </a>
+            </li>
+            {% endif %}
+        {% empty %}
+            <li>You have not placed any bids so far.</li>
+        {% endfor %}
+    </ul>
+    <p>Closed Listings:</p>
+    <ul>
+        {% for bid in bids %}
+            {% if not bid.listing.active %}
+            <li>
+                <a href="{% url 'listing' bid.listing.id %}">
+                    {{ bid.value }} at {{ bid.listing }}
+                    {% if bid == bid.listing.highest_bid %}
+                    (you won this bid)
+                    {% endif %}
+                </a>
+            </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endblock %}

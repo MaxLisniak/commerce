@@ -1,7 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.db.models.fields import CharField
-from django.http import HttpResponse, HttpResponseRedirect
+from django.db.models.fields import CharField, IntegerField, URLField
+from django.forms.widgets import NumberInput, TextInput, Textarea, URLInput
+from django.http import HttpResponse, HttpResponseRedirect, request
 from django.shortcuts import render
 from django.urls import reverse
 from django import forms
@@ -82,6 +83,12 @@ class NewListingForm(ModelForm):
     class Meta:
         model = Listing
         fields = ["title", "description", "starting_price", "photo", "category"]
+        widgets = {
+            'title': TextInput(attrs={'autocomplete': 'off'}),
+            'description': Textarea(attrs={'autocomplete': 'off'}),
+            'starting_price': NumberInput(attrs={'autocomplete': 'off'}),
+            'photo': URLInput(attrs={'autocomplete': 'off'}),
+        } 
 
 @login_required
 def new_listing(request):
@@ -109,7 +116,9 @@ class BidForm(ModelForm):
         fields = ["value", "user", "listing"]
         widgets = {
             'user': forms.HiddenInput(),
-            'listing': forms.HiddenInput()}
+            'listing': forms.HiddenInput(),
+            'value': NumberInput(attrs={'autocomplete': 'off'})
+            }
 
 class CommentForm(ModelForm):
     class Meta:
@@ -118,7 +127,9 @@ class CommentForm(ModelForm):
         widgets = {
             'user': forms.HiddenInput(),
             'listing': forms.HiddenInput(),
-            'datetime': forms.HiddenInput()}
+            'datetime': forms.HiddenInput(),
+            'text': Textarea(attrs={'autocomplete': 'off'})
+            }
 
 def listing(request, id):
     try:
@@ -263,3 +274,17 @@ def notification(request, id):
     notification.seen = True
     notification.save()
     return HttpResponseRedirect(notification.url)
+
+@login_required
+def my_listings(request):
+    user = request.user
+    return render(request, "auctions/my_listings.html", {
+        "listings": user.listings.order_by("active").order_by("-datetime").all()
+    })
+
+@login_required
+def my_bids(request):
+    user = request.user
+    return render(request, "auctions/my_bids.html", {
+        "bids": user.bids.order_by("-datetime").all()
+    })

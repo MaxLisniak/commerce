@@ -36,7 +36,7 @@ class Listing(models.Model):
         return self.bids.order_by("-value").first()
 
     def __str__(self):
-        return f"{self.title} by {self.owner}"
+        return f"{self.owner}'s '{self.title}'"
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="comments", null=True)
@@ -52,7 +52,8 @@ class Bid(models.Model):
     value = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bids")
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="bids")
-        
+    datetime = models.DateTimeField(default=datetime(2021, 9, 12))
+
     def clean(self):
         highest_bid = self.listing.highest_bid()
         if highest_bid:

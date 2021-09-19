@@ -1,0 +1,12 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>My Listings</h2>
+    <ul>
+        {% for listing in listings %}
+            {% include "auctions/listing_info.html" %}
+        {% empty %}
+            <li>You have not placed any listings so far.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
