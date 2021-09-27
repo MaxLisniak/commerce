@@ -1,7 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.db.models.fields import CharField, IntegerField, URLField
-from django.forms.widgets import NumberInput, TextInput, Textarea, URLInput
+from django.forms.forms import Form
+from django.forms.widgets import NumberInput, Select, TextInput, Textarea, URLInput
 from django.http import HttpResponse, HttpResponseRedirect, request
 from django.shortcuts import render
 from django.urls import reverse
@@ -52,42 +53,71 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
 
+class UserForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].required = True
+        self.fields['email'].required = True
+        self.fields['password'].required = True
+
+    class Meta:
+        model = User
+        fields = ["username", "email", "password"]
+        widgets = {
+            'username': forms.TextInput(attrs={'autocomplete': 'off',
+            "class": "form-input"}),
+            'email': forms.EmailInput(attrs={'autocomplete': 'off',
+            "class": "form-input"}),
+            'password': forms.PasswordInput(attrs={'class': "form-input"})
+        }
+        help_texts = {
+            'username': None,
+        }
 
 def register(request):
     if request.method == "POST":
-        username = request.POST["username"]
-        email = request.POST["email"]
-
-        # Ensure password matches confirmation
-        password = request.POST["password"]
-        confirmation = request.POST["confirmation"]
-        if password != confirmation:
-            return render(request, "auctions/register.html", {
-                "message": "Passwords must match."
-            })
-
+        form = UserForm(request.POST)
+        if form.is_valid():
+            confirmation = request.POST["confirmation"]
+            if request.POST["password"] != confirmation:
+                return render(request, "auctions/register.html", {
+                    "message": "Passwords must match.",
+                    "form": form
+                })
         # Attempt to create new user
-        try:
-            user = User.objects.create_user(username, email, password)
-            user.save()
-        except IntegrityError:
-            return render(request, "auctions/register.html", {
-                "message": "Username already taken."
-            })
-        login(request, user)
-        return HttpResponseRedirect(reverse("index"))
+            try:
+                # user = User.objects.create_user(username, email, password)
+                user = form.save()
+            except IntegrityError:
+                return render(request, "auctions/register.html", {
+                    "message": "Username already taken.",
+                    "form": form
+                })
+            login(request, user)
+            return HttpResponseRedirect(reverse("index"))
+        return render(request, "auctions/register.html", {
+            "form": form,
+        })
     else:
-        return render(request, "auctions/register.html")
+        return render(request, "auctions/register.html", {
+            "form": UserForm()
+        })
 
 class NewListingForm(ModelForm):
     class Meta:
         model = Listing
         fields = ["title", "description", "starting_price", "photo", "category"]
         widgets = {
-            'title': TextInput(attrs={'autocomplete': 'off'}),
-            'description': Textarea(attrs={'autocomplete': 'off'}),
-            'starting_price': NumberInput(attrs={'autocomplete': 'off'}),
-            'photo': URLInput(attrs={'autocomplete': 'off'}),
+            'title': TextInput(attrs={'autocomplete': 'off', 
+                                      "class": "form-input"}),
+            'description': Textarea(attrs={'autocomplete': 'off', 
+                                           "class": "form-input area", 
+                                           }),
+            'starting_price': NumberInput(attrs={'autocomplete': 'off', 
+                                                 "class": "form-input"}),
+            'photo': URLInput(attrs={'autocomplete': 'off', 
+                                     "class": "form-input"}),
+            'category': Select(attrs={"class": "form-input"})
         } 
 
 @login_required

@@ -1,15 +1,22 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<ul>
-    {% for notification in notifications %}
-    <li>
-        <p>{{ notification.text }}</p>
-        <p>{{ notification.datetime|date:'Y-m-d H:i' }}</p>
-        <a href="{% url 'notification' notification.id %}">See details</a>
-    </li>
-    {% empty %}
-        <li>No notifications so far.</li>
-    {% endfor %}
-</ul>
+<div class="page-container">
+    <div class="page-title">
+        <h1>Your notifications</h1>
+    </div>
+    <div class="notifications-page-container">
+        {% for notification in notifications %}
+        <div class="notifications-page-notification">
+            <!-- <div class="notifications-page-notification-text"> -->
+                <p>{{ notification.text }}</p>
+                <p class="notifications-page-notification-datetime">{{ notification.datetime|date:'Y-m-d H:i' }}</p>
+                <a href="{% url 'notification' notification.id %}" class="details">See details</a>
+            <!-- </div> -->
+        </div>
+        {% empty %}
+            <li>No notifications so far.</li>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

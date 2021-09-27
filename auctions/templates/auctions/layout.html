@@ -4,19 +4,46 @@
 <html lang="en">
     <head>
         <title>{% block title %}Auctions{% endblock %}</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
         <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
     </head>
     <body>
-        <h1>Auctions</h1>
+        <!-- <h1>Auctions</h1>
         <div>
             {% if user.is_authenticated %}
                 Signed in as <strong>{{ user.username }}</strong>.
             {% else %}
                 Not signed in.
             {% endif %}
+        </div> -->
+        <div class="header">
+            <div class="brand">Auctions</div>
+            <div class="header-links">
+                <a class="link" href="{% url 'index' %}">Active Listings</a>
+                <a class="link" href="{% url 'new_listing' %}">Create Listing</a>
+            </div>
         </div>
-        <ul class="nav">
+        <div class="user-block">
+            <div class="user-block-links">
+                {% if user.is_authenticated %}
+                    <p class="link">Signed in as <strong>{{ user.username }}</strong></p>
+                    <a class="link" href="{% url 'watchlist' %}">Watchlist</a>
+                    <a class="link" href="{% url 'my_listings' %}">My Listings</a>
+                    <a class="link" href="{% url 'my_bids' %}">My Bids</a>
+                    {% if user.unread == 0 %}
+                        <a class="link" href="{% url 'notifications' %}">Notifications</a>
+                    {% else %}
+                        <a class="link" href="{% url 'notifications' %}">Notifications ({{ user.unread }})</a>
+                    {% endif %}
+                    <a class="link" href="{% url 'logout' %}">Log Out</a>
+                {% else %}
+                    <p class="link">Not signed in</p>
+                    <a class="link" href="{% url 'login' %}">Log In</a>
+                    <a class="link" href="{% url 'register' %}">Register</a>
+                {% endif %}
+            </div>
+        </div>
+        <!-- <ul class="nav">
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
             </li>
@@ -55,7 +82,7 @@
                 </li>
             {% endif %}
         </ul>
-        <hr>
+        <hr> -->
         {% block body %}
         {% endblock %}
     </body>

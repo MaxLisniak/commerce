@@ -1,12 +1,18 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>My Listings</h2>
-    <ul>
-        {% for listing in listings %}
-            {% include "auctions/listing_info.html" %}
-        {% empty %}
-            <li>You have not placed any listings so far.</li>
-        {% endfor %}
-    </ul>
+    <div class="page-container">
+        <div class="page-title">
+            <h1>My Listings</h1>
+        </div>
+        <div class="listings-page-listings-container vertical-list">
+            {% for listing in listings %}
+                <div class="listings-page-card">
+                    {% include "auctions/listing_info.html" %}
+                </div>
+            {% empty %}
+                <p>You have not placed any listings so far.</p>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

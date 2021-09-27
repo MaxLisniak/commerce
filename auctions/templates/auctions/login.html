@@ -2,24 +2,27 @@
 
 {% block body %}
 
-    <h2>Login</h2>
-
-    {% if message %}
-        <div>{{ message }}</div>
-    {% endif %}
-
-    <form action="{% url 'login' %}" method="post">
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{next}}" />
-        <div class="form-group">
-            <input autofocus class="form-control" type="text" name="username" placeholder="Username">
+    <div class="page-container">
+        <div class="page-title">
+            <h1>Log into your account</h1>
+            {% if message %}
+                <div>{{ message }}</div>
+            {% endif %}
         </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="password" placeholder="Password">
-        </div>
-        <input class="btn btn-primary" type="submit" value="Login">
-    </form>
-
-    Don't have an account? <a href="{% url 'register' %}">Register here.</a>
+        <!-- <div class="form-page-form-container"> -->
+            <form class="form-page-form" action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{next}}" />
+                <label for="login-username">Username</label>
+                <input autofocus id="login-username" class="form-input" type="text" name="username" placeholder="Username">
+                <label for="login-password">Password</label>
+                <input id="login-password" class="form-input" type="password" name="password" placeholder="Password">
+                <input class="form-submit" type="submit" value="Login">
+            </form>
+            <div class="form-page-tip">
+                Don't have an account? <a href="{% url 'register' %}">Register here.</a>
+            </div>
+        <!-- </div> -->
+    </div>
 
 {% endblock %}

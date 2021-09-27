@@ -1,3 +1,320 @@
 body {
+    padding: 0px;
+    margin: 0px;
+
+    background-color: #CCD7BE;
+}
+html{
+    box-sizing: border-box;
+
+    font-family: "Roboto", Corbel, Avenir, "Lucida Grande", "Lucida Sans", sans-serif
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+  }
+a{
+    color: #466A42;
+}
+.header{
+    margin: 10px;
+    padding: 5px 20px;
+
+    background-color: #FFFBF2;
+    border-radius: 7px;
+
+    display: grid;
+    grid-template-columns: 230px auto;
+
+}
+.brand{
+    grid-column-start: 1;
+
+    font-size: 2.2rem;
+    color: #466A42;
+    font-weight: 300;
+    line-height: normal;
+}
+.header-links{
+    grid-column-start: 2;
+
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+}
+/*  */
+.user-block{
+    margin: 10px;
+    padding: 5px 20px;
+
+    background-color: #FFFBF2;
+    border-radius: 7px;
+}
+.user-block-links{
+    width: 100%;
+
+    display: inline-flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.user-block-links p{
+    margin:0px;
+}
+.header-links .link, .user-block-links .link{
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: black;
+    text-decoration: none;
+}
+/* .listings-page-container{
+    display: grid;
+    grid-template-rows: auto auto;
+} */
+.listings-page-listings-container{
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 2;
+    
     padding: 10px;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    justify-content: space-between;
+}
+
+.vertical-list{
+    flex-direction: column;
+}
+.remove{
+    color: tomato;
+    text-decoration: none;
+    background-color: rgba(255, 99, 71, 0.178);
+    padding: 10px;
+    border-radius: 6px;
+}
+.vertical-list .listings-page-card{
+    flex-basis: unset;
+    flex-direction: row;
+    align-items: center;
+}
+.vertical-list .listings-page-card .listings-page-card-text{
+    flex-grow: 4;
+    padding: 0 10px;
+}
+.vertical-list .listings-page-card .listings-page-card-text .listings-page-card-description{
+    display:unset;
+}
+.listings-page-card{
+    margin-bottom: 30px;
+    /* padding-top: 6px; */
+    padding: 6px 6px 0px 6px;
+
+    background-color: #FFFBF2;
+    border-radius: 7px;
+    /* flex: 1 1 0px; */
+    /* flex-grow: 3; */
+    /* max-width: 400px; */
+    flex-basis: 30%;
+    display: flex;
+    flex-direction: column;
+    
+    /* grid-template-rows: auto 100px 1fr; */
+}
+.listings-page-card-description{
+    padding: 0 10px;
+
+    display: none;
+}
+.listings-page-card-text{
+    display: flex;
+    flex-direction: column;
+}
+.listings-page-card-image-container{
+    /* margin-top: 20px; */
+    text-align: center;
+    position: relative;
+    /* grid-row-start: 1; */
+    /* padding-top: 10px; */
+}
+.listings-page-card-image-container img{
+    max-height: 200px;
+    width: auto;
+    margin-bottom: 0;
+    border-radius: 5px;
+    /* max-height: 50%; */
+
+    /* position: relative; */
+}
+.listings-page-card-info{
+    /* grid-row-start: 3; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: auto;
+    margin-bottom: 20px;
+}
+.listings-page-card-title{
+    font-size: 1.3rem;
+    text-align: center;
+    /* grid-row-start: 2; */
+}
+.listings-page-card-info-line1, .listings-page-card-info-line2{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+.notifications-page-container{
+    display: flex;
+    flex-direction: column;
+    grid-row-start: 2;
+    grid-column-start: 1;
+    grid-column-end:4;
+    gap: 10px;
+
+    padding: 10px;
+}
+.notifications-page-notification{
+    padding: 10px;
+
+    font-size: 1.1rem;
+    background-color: #FFFBF2;
+    border-radius: 7px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* justify-content: center; */
+}
+/* .notifications-page-notification-text{
+    display: flex; 
+} */
+.notifications-page-notification-datetime{
+    flex-grow: 2; 
+    text-align: right;
+}
+.details{
+    background-color: #466a4226;
+    padding: 10px 40px;
+    border-radius: 6px;
+    text-decoration: none;
+    margin-left: 20px;
+}
+/* .image img{
+    width: 100%;
+    height: auto;
+} */
+.card .see{
+    position:absolute;
+    left: calc(50% - 40px);
+    top: calc(50% - 34px);
+    background-color: #ccd7bead;
+    padding: 10px 30px;
+    border-radius: 30px;
+}
+.card .see:hover{
+    background-color: #ccd7be;
+}
+.card .see a{
+    color: #466A42;
+    text-decoration: none;
+    line-height: normal;
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+/* login */
+.page-container{
+    display: grid;
+    grid-template-columns: 1fr 30% 1fr;
+    grid-template-rows: auto auto auto;
+    /* width: 100%;
+    grid-template-columns: 1fr 40% 1fr;
+    grid-template-rows: 100px auto;
+    margin: 0;
+    padding: 0px 10px; */
+}
+.page-title{
+    grid-row-start: 1;
+    grid-column-start: 1;
+    grid-column-end: 4;
+
+    font-size: 1rem;
+    text-align: center;
+}
+.form-page-form{
+    grid-column-start: 2;
+    grid-row-start: 2;
+}
+.form-input{
+    margin-bottom: 10px;
+    padding: 0px 20px;
+
+    width: 100%;
+    height: 40px;
+
+    border-radius: 10px;
+    border: grey solid 1px;
+    background-color: #FFFBF2;
+    color: black;
+    font-size: 1rem;
+}
+.area{
+    resize: vertical;
+    min-height: 80px;
+}
+label{
+    font-size: 1.2rem;
+}
+.form-submit{
+    margin: 20px 0px;
+    padding:5px 20px;
+
+    border-radius: 10px;
+    border: grey solid 1px;
+    background-color: #FFFBF2;
+    font-size: 1rem;
+    color: black;
+}
+.errorlist {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}
+.form-page-tip{
+    grid-row-start: 3;
+    grid-column-start: 2;
+
+    font-size: 1.2rem;
+}
+/* .page-caption{
+    margin-top: 30px;
+
+    
+} */
+.container-listing{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+}
+.column1{
+    grid-column-start: 1;
+}
+.column2{
+    grid-column-start: 2;
+}
+.column1-3{
+    grid-column-start: 1;
+    grid-column-end: 4;
+}
+.row1{
+    grid-row-start: 1;
+}
+.row2{
+    grid-row-start: 2;
+}
+/* .form{
+    width: 100%;
+} */
+
+/* listing */
+.listing-img{
+    max-width: 100%;
 }
