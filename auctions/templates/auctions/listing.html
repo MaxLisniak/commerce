@@ -4,7 +4,7 @@
     <div class="container-listing">
         <div class="column1 listing-img-div">
             {% if listing.photo %}
-                <img class="listing-img" src="{{ listing.photo }}" alt="Listing's photo">
+                <img class="listing-img" src="{{ listing.photo.url }}" alt="Listing's photo">
             {% endif %}
         </div>
         <div class="column2">

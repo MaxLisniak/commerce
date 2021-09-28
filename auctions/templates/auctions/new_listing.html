@@ -5,7 +5,7 @@
     <div class="page-title">
         <h1>Add new listing</h1>
     </div>
-        <form class="form-page-form" action="{% url 'new_listing' %}" method="POST">
+        <form class="form-page-form" action="{% url 'new_listing' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form }}
             <input class="form-submit" type="submit" value="Save">

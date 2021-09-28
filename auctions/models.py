@@ -26,7 +26,8 @@ class Listing(models.Model):
     starting_price = models.IntegerField(validators=[
         MinValueValidator(1)
     ])
-    photo = models.URLField(max_length=1000, null=True, default=None, blank=True)
+    # photo = models.URLField(max_length=1000, null=True, default=None, blank=True)
+    photo = models.ImageField(upload_to="listings", default=None)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name="listings", null=True)
     owner = models.ForeignKey(User,related_name="listings", on_delete=models.CASCADE)
     active = models.BooleanField(default=True)

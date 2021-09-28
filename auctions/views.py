@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.db.models.fields import CharField, IntegerField, URLField
 from django.forms.forms import Form
-from django.forms.widgets import NumberInput, Select, TextInput, Textarea, URLInput
+from django.forms.widgets import ClearableFileInput, NumberInput, Select, TextInput, Textarea, URLInput
 from django.http import HttpResponse, HttpResponseRedirect, request
 from django.shortcuts import render
 from django.urls import reverse
@@ -115,17 +115,20 @@ class NewListingForm(ModelForm):
                                            }),
             'starting_price': NumberInput(attrs={'autocomplete': 'off', 
                                                  "class": "form-input"}),
-            'photo': URLInput(attrs={'autocomplete': 'off', 
-                                     "class": "form-input"}),
+            'photo': ClearableFileInput(attrs={"class": "form-input"}),
             'category': Select(attrs={"class": "form-input"})
         } 
-
+def handle_uploaded_file(f, name):
+    with open(f'{name}.png', 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
 @login_required
 def new_listing(request):
     if request.method == "POST":
-        form = NewListingForm(request.POST)
+        form = NewListingForm(request.POST, request.FILES)
         if form.is_valid():
             listing = form.save(commit=False)
+            # handle_uploaded_file(request.FILES['photo'], listing.title)
             listing.owner = request.user
             listing.datetime = datetime.now()
             listing.save()

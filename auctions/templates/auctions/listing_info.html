@@ -3,7 +3,7 @@
     <a href="{% url 'listing' listing.id %}">
         <div class="listings-page-card-image-container">
             {% if listing.photo %}
-            <img src="{{ listing.photo }}" alt="Listing's photo">
+            <img src="{{ listing.photo.url }}" alt="Listing's photo">
             {% else %}
             <img src="https://us.123rf.com/450wm/pavelstasevich/pavelstasevich1811/pavelstasevich181101065/112815953-no-image-available-icon-flat-vector.jpg?ver=6" alt="No image available">
             {% endif %}
