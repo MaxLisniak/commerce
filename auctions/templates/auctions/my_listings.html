@@ -11,7 +11,9 @@
                     {% include "auctions/listing_info.html" %}
                 </div>
             {% empty %}
-                <p>You have not placed any listings so far.</p>
+                <div class="no-content">
+                    You have not placed any listings so far
+                </div>
             {% endfor %}
         </div>
     </div>

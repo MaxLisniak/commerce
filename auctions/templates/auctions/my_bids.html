@@ -1,37 +1,43 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>My Bids</h2>
-    <p>Active Listings:</p>
-    <ul>
+<div class="page-container">
+    <div class="page-title">
+        <h1>My Bids</h1>
+    </div>
+    <div class="listings-page-listings-container vertical-list">
         {% for bid in bids %}
             {% if bid.listing.active %}
-            <li>
-                <a href="{% url 'listing' bid.listing.id %}">
+                <a class="bid-container" href="{% url 'listing' bid.listing.id %}">
                     {{ bid.value }} at {{ bid.listing }}
                     {% if bid == bid.listing.highest_bid %}
-                    (your bid is the highest bid so far)
+                    <div class="green-label">
+                        Your bid is the highest bid so far
+                    </div>
                     {% endif %}
+                    <div class="green-label">
+                        Active
+                    </div>
                 </a>
-            </li>
+            {% else %}
+                <a class="bid-container" href="{% url 'listing' bid.listing.id %}">
+                    {{ bid.value }} at {{ bid.listing }}
+                    {% if bid == bid.listing.highest_bid %}
+                    <div class="green-label">
+                        You won this bid
+                    </div>
+                    {% endif %}
+                    <div class="red-label">
+                        Closed
+                    </div>
+                </a>
             {% endif %}
         {% empty %}
-            <li>You have not placed any bids so far.</li>
+            <div class="no-content">You have not placed any bids so far.</div>
         {% endfor %}
-    </ul>
-    <p>Closed Listings:</p>
-    <ul>
-        {% for bid in bids %}
-            {% if not bid.listing.active %}
-            <li>
-                <a href="{% url 'listing' bid.listing.id %}">
-                    {{ bid.value }} at {{ bid.listing }}
-                    {% if bid == bid.listing.highest_bid %}
-                    (you won this bid)
-                    {% endif %}
-                </a>
-            </li>
-            {% endif %}
-        {% endfor %}
-    </ul>
+    </div>
+    <!-- <p>Active Listings:</p> -->
+        
+</div>
+
 {% endblock %}

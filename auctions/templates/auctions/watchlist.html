@@ -9,10 +9,10 @@
             {% for listing in listings %}
                 <div class="listings-page-card">
                     {% include "auctions/listing_info.html" %}
-                    <a href="{% url 'unwatch' listing.id %}?next={{request.get_full_path}}" class="remove">Remove from watchlist</a>
+                    <a href="{% url 'unwatch' listing.id %}?next={{request.get_full_path}}" class="red-label">Remove from watchlist</a>
                 </div>
             {% empty %}
-                <p>No listings were added yet.</p>
+                <div class="no-content">No listings were added yet</div>
             {% endfor %}
             
         </div>

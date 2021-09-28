@@ -256,7 +256,7 @@ def deactivate(request, id):
     if user == listing.owner:
         listing.active = False
         listing.save()
-        notification_text = f"Congratulations! You won the bid '{listing}'!"
+        notification_text = f'Congratulations! You won the bid {listing}!'
         notification = Notification(user=listing.highest_bid().user, 
                     text=notification_text, 
                     datetime=datetime.now(),

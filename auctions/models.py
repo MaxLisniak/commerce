@@ -65,7 +65,7 @@ class Bid(models.Model):
                 raise ValidationError(_('Your bid must not be lower than the starting one.'))
 
     def __str__(self):
-        return f"{self.value} by {self.user} at {self.listing}"
+        return f"${self.value} by {self.user} at {self.listing}"
 
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notifications")

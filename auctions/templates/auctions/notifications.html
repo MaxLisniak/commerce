@@ -11,7 +11,7 @@
             <!-- <div class="notifications-page-notification-text"> -->
                 <p>{{ notification.text }}</p>
                 <p class="notifications-page-notification-datetime">{{ notification.datetime|date:'Y-m-d H:i' }}</p>
-                <a href="{% url 'notification' notification.id %}" class="details">See details</a>
+                <a href="{% url 'notification' notification.id %}" class="green-label">See details</a>
             <!-- </div> -->
         </div>
         {% empty %}
