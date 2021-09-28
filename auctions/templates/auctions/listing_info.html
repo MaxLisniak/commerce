@@ -1,21 +1,17 @@
-
-    <!-- <p>{{ listing.description }}</p> -->
-    <a href="{% url 'listing' listing.id %}">
-        <div class="listings-page-card-image-container">
-            {% if listing.photo %}
-            <img src="{{ listing.photo.url }}" alt="Listing's photo">
-            {% else %}
-            <img src="https://us.123rf.com/450wm/pavelstasevich/pavelstasevich1811/pavelstasevich181101065/112815953-no-image-available-icon-flat-vector.jpg?ver=6" alt="No image available">
-            {% endif %}
-        </div>
-    </a>
+    <div class="listings-page-card-image-container">
+        {% if listing.photo %}
+        <img src="{{ listing.photo.url }}" alt="Listing's photo">
+        {% else %}
+        <img src="https://us.123rf.com/450wm/pavelstasevich/pavelstasevich1811/pavelstasevich181101065/112815953-no-image-available-icon-flat-vector.jpg?ver=6" alt="No image available">
+        {% endif %}
+    </div>
     <div class="listings-page-card-text">
         <p class="listings-page-card-title">{{ listing.title }}</p>
         <p class="listings-page-card-description">{{ listing.description }}</p>
         <div class="listings-page-card-info">
             <div class="listings-page-card-info-line1">
                 <div>in {{ listing.category.name }}</div>
-                <div>{{ listing.datetime|date:"m.d.Y g:iA" }}</div>
+                <div style="margin-left: 30px;">{{ listing.datetime|date:"m.d.Y g:iA" }}</div>
             </div>
             <div class="listings-page-card-info-line2">
                 <div>{{ listing.owner.username }}'s</div>
@@ -31,8 +27,4 @@
             </div>
         </div>
     </div>
-    <!-- <p>{{ listing.owner.username }}</p>
-    <p>Price: 
-    </p> -->
-
         

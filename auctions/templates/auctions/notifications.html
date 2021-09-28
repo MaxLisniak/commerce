@@ -7,13 +7,14 @@
     </div>
     <div class="notifications-page-container">
         {% for notification in notifications %}
+        <a style="text-decoration: none;" href="{% url 'notification' notification.id %}">
         <div class="notifications-page-notification">
             <!-- <div class="notifications-page-notification-text"> -->
-                <p>{{ notification.text }}</p>
-                <p class="notifications-page-notification-datetime">{{ notification.datetime|date:'Y-m-d H:i' }}</p>
-                <a href="{% url 'notification' notification.id %}" class="green-label">See details</a>
-            <!-- </div> -->
-        </div>
+                    <p>{{ notification.text }}</p>
+                <p class="notifications-page-notification-datetime">{{ notification.datetime|date:"m.d.Y g:iA" }}</p>
+                <!-- </div> -->
+            </div>
+        </a>
         {% empty %}
             <li>No notifications so far.</li>
         {% endfor %}

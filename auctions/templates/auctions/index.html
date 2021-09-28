@@ -5,8 +5,11 @@
     <div class="page-container">
         <div class="listings-page-listings-container">
             {% for listing in listings %}
+
                 <div class="listings-page-card">
                     {% include "auctions/listing_info.html" %}
+                    <a href="{% url 'listing' listing.id %}" class="see">See listing</a>
+
                 </div>
             {% empty %}
                 <div class="no-content">No active listings for now</div>

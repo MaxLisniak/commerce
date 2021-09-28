@@ -1,80 +1,83 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <div class="container-listing">
-        <div class="column1 listing-img-div">
-            {% if listing.photo %}
-                <img class="listing-img" src="{{ listing.photo.url }}" alt="Listing's photo">
-            {% endif %}
+    <div class="page-container">
+        <div class="page-title">
+            <h1>{{ listing.title }}</h1>
         </div>
-        <div class="column2">
-            {% if listing in user.watchlist.all %}
-                <a href="{% url 'unwatch' listing.id %}">Remove from watchlist</a>
-            {% else %}
-                <a href="{% url 'watch' listing.id %}">Add to watchlist</a>
-            {% endif %}
-        </div>
-    </div>
-    
-    <h1>{{ listing.title }}</h1>
-    <p>{{ listing.description }}</p>
-    {% if listing.active %}
-        <p>Current price:
-            {% if listing.highest_bid %}
-                {{ listing.highest_bid.value }}
-            {% else %}
-                {{ listing.starting_price }}
-            {% endif %}
-        </p>
-        <p>{{ listing.bids.count }} bid(s) so far.</p>
-        {% if user == listing.owner %}
-            <h2>Bid history:</h2>
-            <ul>
-                {% for bid in bids %}
-                <li>{{ bid.value }} by {{ bid.user }}</li>
-                {% empty %}
-                <li>No bids yet</li>
-                {% endfor %}
-            </ul>
-            <a href="{% url 'deactivate' listing.id %}">Close this listing</a>
-        {% else %}
-        <h2>Place a bid</h2>
-        <form action="{% url 'listing' listing.id %}" method="POST">
-            {% csrf_token %}
-            {{ form }}
-            <input type="submit" name="place_bid" value="Bid">
-        </form>
-        {% endif %}
-    {% else %}
-        <p>Final price:
-            {% if listing.highest_bid %}
-                {{ listing.highest_bid.value }}
-            {% else %}
-                {{ listing.starting_price }}
-            {% endif %}
-        </p>
-        {% if listing.highest_bid.user == user %}
-            <h2>Congratulations! You won the bid!</h2>
-        {% else %}
-            <h2>This bid is closed.</h2>
-        {% endif %}
-    {% endif %}
-    <h3>Comments</h3>
-    <form action="{% url 'listing' listing.id %}" method="POST">
-        {% csrf_token %}
-        {{ comment_form }}
-        <input type="submit" name="comment" value="Send">
-    </form>
-    <ul>
-        {% for comment in comments %}
-            <li>
-                <p>{{comment.user}}</p>
-                <p>{{comment.text}}</p>
-                <p>{{comment.datetime|date:'Y-m-d H:i'}}</p>
-            </li>
-        {% empty %}
-            <li>No comments so far.</li>
-        {% endfor %}
-    </ul>
-    
+        <div class="listing-page-container">
+            <div class="listing-page-image-container">
+                <img src="{{ listing.photo.url }}" alt="Listing's photo"">
+            </div>
+            <div class="listing-page-text">
+                {% if listing in user.watchlist.all %}
+                    <a href="{% url 'unwatch' listing.id %}"><div style="margin: 0;" class="red-label">Remove from watchlist</div></a>
+                {% else %}
+                    <a href="{% url 'watch' listing.id %}"><div style="margin: 0;" class="green-label">Add to watchlist</div></a>
+                {% endif %}
+                <p>{{ listing.description }}</p>
+                <hr style="border: rgba(46, 139, 86, 0.219) 1px solid;">
+                {% if listing.active %}
+                    <p>Current price:
+                        {% if listing.highest_bid %}
+                            {{ listing.highest_bid.value }}
+                        {% else %}
+                            {{ listing.starting_price }}
+                        {% endif %}
+                    </p>
+                    <p>{{ listing.bids.count }} bid(s) so far.</p>
+                    {% if user == listing.owner %}
+                        <h2>Bid history:</h2>
+                        <ul>
+                            {% for bid in bids %}
+                            <li>{{ bid.value }} by {{ bid.user }}</li>
+                            {% empty %}
+                            <li>No bids yet</li>
+                            {% endfor %}
+                        </ul>
+                        <a href="{% url 'deactivate' listing.id %}"><div style="margin: 0;" class="red-label">Close this listing</div></a>
+                    {% else %}
+                    <h2 style="text-align: center;">Place a bid</h2>
+                    <form action="{% url 'listing' listing.id %}" method="POST">
+                        {% csrf_token %}
+                        {{ form }}
+                        <input class="form-submit" type="submit" name="place_bid" value="Bid">
+                    </form>
+                    {% endif %}
+                {% else %}
+                    <p>Final price:
+                        {% if listing.highest_bid %}
+                            {{ listing.highest_bid.value }}
+                        {% else %}
+                            {{ listing.starting_price }}
+                        {% endif %}
+                    </p>
+                    {% if listing.highest_bid.user == user %}
+                        <h2 class="subheader">Congratulations! You won the bid!</h2>
+                    {% else %}
+                        <h2 class="subheader">This bid is closed</h2>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="listing-page-comments-container">
+                <h2 class="subheader">Comments</h2>
+                <form action="{% url 'listing' listing.id %}" method="POST">
+                    {% csrf_token %}
+                    {{ comment_form }}
+                    <input class="form-submit" type="submit" name="comment" value="Send">
+                </form>
+                <div class="comments-container">
+                    {% for comment in comments %}
+                        <div class="comment">
+                            <div class="comment-user"><strong>{{comment.user}}</strong></div>
+                            <div class="comment-datetime">{{comment.datetime|date:"m.d.Y g:iA"}}</div>
+                            <div>{{comment.text}}</div>
+                        </div>
+                    {% empty %}
+                        <div class="no-content">No comments so far.</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>    
 {% endblock %}
+

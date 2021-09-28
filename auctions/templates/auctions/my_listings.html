@@ -7,9 +7,15 @@
         </div>
         <div class="listings-page-listings-container vertical-list">
             {% for listing in listings %}
+            <!-- <a href="{% url 'listing' listing.id %}"> -->
+
                 <div class="listings-page-card">
                     {% include "auctions/listing_info.html" %}
+                    <a href="{% url 'listing' listing.id %}" class="see">See listing</a>
+
                 </div>
+            <!-- </a> -->
+            
             {% empty %}
                 <div class="no-content">
                     You have not placed any listings so far

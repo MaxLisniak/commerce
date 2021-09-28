@@ -150,7 +150,7 @@ class BidForm(ModelForm):
         widgets = {
             'user': forms.HiddenInput(),
             'listing': forms.HiddenInput(),
-            'value': NumberInput(attrs={'autocomplete': 'off'})
+            'value': NumberInput(attrs={'autocomplete': 'off', 'class': 'form-input'})
             }
 
 class CommentForm(ModelForm):
@@ -161,7 +161,7 @@ class CommentForm(ModelForm):
             'user': forms.HiddenInput(),
             'listing': forms.HiddenInput(),
             'datetime': forms.HiddenInput(),
-            'text': Textarea(attrs={'autocomplete': 'off'})
+            'text': Textarea(attrs={'autocomplete': 'off', 'class': 'form-input comment-area'})
             }
 
 def listing(request, id):
@@ -285,7 +285,7 @@ def category(request, name):
 @login_required
 def watchlist(request):
     return render(request, "auctions/watchlist.html",{
-        "listings": request.user.watchlist.all()
+        "listings": request.user.watchlist.order_by("-datetime").all()
     })
 
 @login_required
