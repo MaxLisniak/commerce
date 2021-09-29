@@ -11,8 +11,13 @@
 
                 <div class="listings-page-card">
                     {% include "auctions/listing_info.html" %}
+                    {% if listing.comments.count == 1 %}
+                    <a href="{% url 'listing' listing.id %}" class="see">See listing ({{ listing.comments.count }} comment)</a>
+                    {% elif listing.comments.count > 1 %}
+                    <a href="{% url 'listing' listing.id %}" class="see">See listing ({{ listing.comments.count }} comments)</a>
+                    {% else %}
                     <a href="{% url 'listing' listing.id %}" class="see">See listing</a>
-
+                    {% endif %}
                 </div>
             <!-- </a> -->
             

@@ -36,7 +36,7 @@
                             {% endfor %}
                         </ul>
                         <a href="{% url 'deactivate' listing.id %}"><div style="margin: 0;" class="red-label">Close this listing</div></a>
-                    {% else %}
+                    {% elif user.is_authenticated %}
                     <h2 style="text-align: center;">Place a bid</h2>
                     <form action="{% url 'listing' listing.id %}" method="POST">
                         {% csrf_token %}
@@ -61,11 +61,13 @@
             </div>
             <div class="listing-page-comments-container">
                 <h2 class="subheader">Comments</h2>
+                {% if user.is_authenticated %}
                 <form action="{% url 'listing' listing.id %}" method="POST">
                     {% csrf_token %}
                     {{ comment_form }}
                     <input class="form-submit" type="submit" name="comment" value="Send">
                 </form>
+                {% endif %}
                 <div class="comments-container">
                     {% for comment in comments %}
                         <div class="comment">

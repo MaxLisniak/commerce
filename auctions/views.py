@@ -18,8 +18,10 @@ from .models import Category, Listing, Notification, User, Comment, Bid
 
 def index(request):
     listings = Listing.objects.filter(active=True).order_by("-datetime").all()
+    categories = Category.objects.all()
     return render(request, "auctions/index.html", {
         "listings": listings,
+        "categories": categories,
     })
 
 
@@ -93,6 +95,13 @@ def register(request):
                     "message": "Username already taken.",
                     "form": form
                 })
+            # username = form.cleaned_data.get('username')
+            # password = form.cleaned_data.get('password')
+
+            user.set_password(user.password)
+            user.save()
+
+            # use  = authenticate(username=username, password=password)
             login(request, user)
             return HttpResponseRedirect(reverse("index"))
         return render(request, "auctions/register.html", {
@@ -278,9 +287,10 @@ def category(request, name):
     if not category:
         return render(request, "auctions/404.html")
     else:
-        return render(request, "auctions/category.html", {
+        return render(request, "auctions/index.html", {
             "listings": category.listings.filter(active=True).order_by("-datetime").all(),
             "category": category,
+            "categories" : Category.objects.all()
         })
 @login_required
 def watchlist(request):

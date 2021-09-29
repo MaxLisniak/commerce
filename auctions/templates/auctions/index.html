@@ -3,12 +3,26 @@
 {% block body %}
     <!-- <h2>Active Listings</h2> -->
     <div class="page-container">
+        <div class="category-stripe">
+            {% if category %}
+            <a href="{% url 'index' %}" class="category">All listings</a>
+            {% else %}
+            <a href="{% url 'index' %}" class="active-category">All listings</a>
+            {% endif %}
+            {% for category_ in categories %}
+            {% if category == category_ %}
+            <a href="{% url 'category' category_.name %}" class="active-category">{{ category_ }}</a>
+            {% else %}
+            <a href="{% url 'category' category_.name %}" class="category">{{ category_ }}</a>
+            {% endif %}
+            {% endfor %}
+        </div>
         <div class="listings-page-listings-container">
             {% for listing in listings %}
 
                 <div class="listings-page-card">
                     {% include "auctions/listing_info.html" %}
-                    <a href="{% url 'listing' listing.id %}" class="see">See listing</a>
+                    <a href="{% url 'listing' listing.id %}" class="see" style="grid-row-start: 3;">See listing</a>
 
                 </div>
             {% empty %}
