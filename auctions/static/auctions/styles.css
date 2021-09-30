@@ -431,7 +431,7 @@ label{
 }
 .listing-page-image-container img{
     /* max-width: 30vw; */
-    max-width: 95%;
+    max-width: 75%;
     max-height: 70vh;
     border-radius: 10px;
 }
