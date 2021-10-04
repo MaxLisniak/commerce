@@ -34,9 +34,10 @@ ALLOWED_HOSTS = [
 
 
 # Application definition
+import cloudinary
+import cloudinary_storage
 
 INSTALLED_APPS = [
-    'cloudinary_storage',
     'auctions',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -128,13 +130,19 @@ LOGIN_URL = '/login/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-# The absolute path to the directory where collectstatic will collect static files for deployment.
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# The URL to use when referring to static files (where they will be served from)
-STATIC_URL = '/static/'
+WHITENOISE_USE_FINDERS = True
 
-MEDIA_ROOT  = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
+# STATIC_ROOT = BASE_DIR / 'static'
+
+# The absolute path to the directory where collectstatic will collect static files for deployment.
+# The URL to use when referring to static files (where they will be served from)
+# STATIC_URL = '/static/'
+
+
 
 # Heroku: Update database configuration from $DATABASE_URL.
 import dj_database_url
@@ -142,10 +150,13 @@ db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
 
-if os.environ.get('STORAGE', '') == 'CLOUDINARY':
-    CLOUDINARY_STORAGE = {
-        'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME',''),
-        'API_KEY': os.environ.get('CLOUDINARY_API_KEY',''),
-        'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET',''),
-    }
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# if os.environ.get('STORAGE', '') == 'CLOUDINARY':
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME',''),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY',''),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET',''),
+}
+# MEDIA_ROOT  = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
