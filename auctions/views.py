@@ -127,10 +127,7 @@ class NewListingForm(ModelForm):
             'photo': ClearableFileInput(attrs={"class": "form-input"}),
             'category': Select(attrs={"class": "form-input"})
         } 
-def handle_uploaded_file(f, name):
-    with open(f'{name}.png', 'wb+') as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
+
 @login_required
 def new_listing(request):
     if request.method == "POST":
