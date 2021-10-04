@@ -158,5 +158,7 @@ if os.environ.get('STORAGE', '') == 'CLOUDINARY':
         'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET',''),
     }
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+else:
+    MEDIA_ROOT  = os.path.join(BASE_DIR, 'media')
 # MEDIA_ROOT  = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
