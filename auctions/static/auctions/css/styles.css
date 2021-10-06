@@ -52,9 +52,10 @@ a{
     /* background-color: #CCD7BE; */
     background: none;
     border:#CCD7BE 1px none;
-    border-radius: 7px;
+    /* border-radius: 7px; */
     margin: 0;
     padding: 0;
+    color:black;
 }
 #user-block-button:active{
     color: black;
